@@ -2,11 +2,11 @@ package org.example.TSMmaps
 
 object ColumnMaps {
 
-  val columnMapTortilla = Map(
+  val columnMapTortilla: Map[String, String] = Map(
     "Store Type" -> "Store_Type",
     "Price per kilogram" -> "Price_per_kilogram"
   )
-  val columnMapSalmones = Map(
+  val columnMapSalmones: Map[String, String] = Map(
     "District ID" -> "District_ID",
     "Report order" -> "Report_order",
     "Month number" -> "Month_number",
