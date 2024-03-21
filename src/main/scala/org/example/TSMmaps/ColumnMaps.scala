@@ -23,8 +23,6 @@ object ColumnMaps {
     "Farmed 1SW number" -> "Farmed_1SW_number",
     "Farmed 1SW weight (kg)" -> "Farmed_1SW_weight",
     "Netting effort" -> "Netting_effort"
-    
-
   )
 
 }
