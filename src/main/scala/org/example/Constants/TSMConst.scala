@@ -4,7 +4,7 @@ object TSMConst {
 
   val PropertiesPath: String = "/application.properties"
   val AppName: String = "TSM"
-  val jdbcURL: String = "jdbc:postgresql://localhost:5432/"
+  val jdbcURL: String = "jdbc:postgresql://localhost:5433/"
   val tableNameTortillas: String = "tortillas"
   val tableNameSalmones: String = "salmones"
   val tableNameMeteoritos: String = "meteoritos"

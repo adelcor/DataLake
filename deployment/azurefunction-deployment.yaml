@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azurefunctiontest-deployment
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: azurefunctiontest
+  template:
+    metadata:
+      labels:
+        app: azurefunctiontest
+    spec:
+      containers:
+      - name: azurefunctiontest
+        image: cyberpong/azurefunctiontest:latest
+        ports:
+        - containerPort: 7071
