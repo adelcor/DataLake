@@ -22,9 +22,9 @@ object Process {
     writeToJdbc(dataset, TSMConst.jdbcURL, tableName)
   }
 
-  def processDatasetAzurite[T](fileName: String, containerName: String, tableName: String, columnMap: Map[String, String] = Map.empty, columnType: Map[String, DataType] = Map.empty)(implicit spark: SparkSession, enc: Encoder[T], connectionProperties: Properties): Unit = {
-    val dataset:Dataset[T] = readFromAzuriteAsDataset(containerName, fileName, columnMap, columnType)
-    writeToJdbc(dataset, TSMConst.jdbcURL, tableName)
+  def processDatasetAzurite[T](config: DatasetConfig)(implicit spark: SparkSession, enc: Encoder[T], connectionProperties: Properties): Unit = {
+    val dataset:Dataset[T] = readFromAzuriteAsDataset(config.containerName, config.fileName, config.columnMap, config.columnType)
+    writeToJdbc(dataset, TSMConst.jdbcURL, config.tableName)
   }
 
   private def readCsvAsDataset[T](filePath: String, columnMappings: Map[String, String])(implicit spark: SparkSession, enc: Encoder[T]): Dataset[T] = {
@@ -43,27 +43,33 @@ object Process {
     dataset.write.mode(SaveMode.Append).jdbc(jdbcUrl, tableName, connectionProperties)
   }
 
-  def readFromAzuriteAsDataset[T](containerName: String, fileName: String, columnMap: Map[String, String], columnType: Map[String, DataType] )(implicit spark: SparkSession, enc: Encoder[T]): Dataset[T] = {
+  def readFromAzuriteAsDataset[T](containerName: Option[String], fileName: Option[String], columnMap: Map[String, String], columnType: Map[String, DataType])(implicit spark: SparkSession, enc: Encoder[T]): Dataset[T] = {
     import spark.implicits._
 
     val client = asyncHttpClient()
 
     try {
-      val response = client.prepareGet(s"http://localhost:7071/api/MyHttpTrigger?filename=$fileName&container=$containerName").execute().toCompletableFuture().join()
-      if (response.getStatusCode == 200) {
-        val jsonData = response.getResponseBody
-        val jsonDataset = spark.createDataset(Seq(jsonData))
-        val data = spark.read.json(jsonDataset)
-        val convertedData = convertColumnTypes(data, columnType)
-        val renamedData = renameColumns(convertedData, columnMap)
-        renamedData.as[T]
-      } else {
-        throw new Exception(s"Error al hacer la solicitud: ${response.getStatusText}")
+      (containerName, fileName) match {
+        case (Some(cn), Some(fn)) =>
+          val response = client.prepareGet(s"http://localhost:7071/api/MyHttpTrigger?filename=$fn&container=$cn").execute().toCompletableFuture().join()
+          if (response.getStatusCode == 200) {
+            val jsonData = response.getResponseBody
+            val jsonDataset = spark.createDataset(Seq(jsonData))
+            val data = spark.read.json(jsonDataset)
+            val convertedData = convertColumnTypes(data, columnType)
+            val renamedData = renameColumns(convertedData, columnMap)
+            renamedData.as[T]
+          } else {
+            throw new Exception(s"Error al hacer la solicitud: ${response.getStatusText}")
+          }
+        case (None, _) => throw new IllegalArgumentException("containerName no puede ser None para readFromAzuriteAsDataset")
+        case (_, None) => throw new IllegalArgumentException("fileName no puede ser None para readFromAzuriteAsDataset")
       }
     } finally {
       client.close()
     }
   }
+
 
   def convertColumnTypes(data: DataFrame, columnTypes: Map[String, DataType]): DataFrame = {
     columnTypes.foldLeft(data) { case (df, (columnName, dataType)) =>

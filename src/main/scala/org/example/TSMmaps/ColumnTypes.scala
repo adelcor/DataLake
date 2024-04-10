@@ -30,7 +30,7 @@ object ColumnTypes {
     "Price per kilogram" -> DoubleType
   )
 
-  val MeteoritoTypeMap = Map(
+  val meteoritoTypeMap = Map(
     "id" -> IntegerType,
     "mass" -> DoubleType,
     "year" -> IntegerType,
