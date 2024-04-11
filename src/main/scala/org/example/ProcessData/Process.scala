@@ -23,7 +23,7 @@ object Process {
   }
 
   def processDatasetAzurite[T](config: DatasetConfig)(implicit spark: SparkSession, enc: Encoder[T], connectionProperties: Properties): Unit = {
-    val dataset:Dataset[T] = readFromAzuriteAsDataset(config.containerName, config.fileName, config.columnMap, config.columnType)
+    val dataset:Dataset[T] = readFromAzuriteAsDataset(config)
     writeToJdbc(dataset, TSMConst.jdbcURL, config.tableName)
   }
 
@@ -43,21 +43,23 @@ object Process {
     dataset.write.mode(SaveMode.Append).jdbc(jdbcUrl, tableName, connectionProperties)
   }
 
-  def readFromAzuriteAsDataset[T](containerName: Option[String], fileName: Option[String], columnMap: Map[String, String], columnType: Map[String, DataType])(implicit spark: SparkSession, enc: Encoder[T]): Dataset[T] = {
+
+  //puedo pasar tambien config a readfromazurite y meter los parametros en plan config.loquesea
+  def readFromAzuriteAsDataset[T](config: DatasetConfig)(implicit spark: SparkSession, enc: Encoder[T]): Dataset[T] = {
     import spark.implicits._
 
     val client = asyncHttpClient()
 
     try {
-      (containerName, fileName) match {
+      (config.containerName, config.fileName) match {
         case (Some(cn), Some(fn)) =>
           val response = client.prepareGet(s"http://localhost:7071/api/MyHttpTrigger?filename=$fn&container=$cn").execute().toCompletableFuture().join()
           if (response.getStatusCode == 200) {
             val jsonData = response.getResponseBody
             val jsonDataset = spark.createDataset(Seq(jsonData))
             val data = spark.read.json(jsonDataset)
-            val convertedData = convertColumnTypes(data, columnType)
-            val renamedData = renameColumns(convertedData, columnMap)
+            val convertedData = convertColumnTypes(data, config.columnType)
+            val renamedData = renameColumns(convertedData, config.columnMap)
             renamedData.as[T]
           } else {
             throw new Exception(s"Error al hacer la solicitud: ${response.getStatusText}")

@@ -22,6 +22,4 @@ object readConfig {
     .withFileName(TSMConst.fileMeteoritos)
     .withContainerName(TSMConst.containerMicont)
     .withColumnType(meteoritoTypeMap)
-
-
 }

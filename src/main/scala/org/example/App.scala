@@ -10,5 +10,6 @@ object App {
 
     initLoad()
     spark.stop()
+
   }
 }

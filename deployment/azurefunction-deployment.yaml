@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: azurefunctiontest-deployment
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: azurefunctiontest
@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: azurefunctiontest
-        image: cyberpong/azurefunctiontest:latest
+        image: cyberpong/myappk8s:latest
         ports:
         - containerPort: 7071
