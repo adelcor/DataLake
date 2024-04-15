@@ -8,6 +8,8 @@ Start-Job -ScriptBlock { kubectl port-forward service/postgres-service 5433:5432
 
 Start-Job -ScriptBlock { kubectl port-forward service/azurefunctiontest-service 7071:7071 }
 
+Start-Job -ScriptBlock { kubectl port-forward service/cosmosdb-emulator-service 8081:8081 }
+
 
 # Espera a que el usuario presione una tecla para terminar
 Write-Host "Port forwarding establecido. Presiona cualquier tecla para continuar..."

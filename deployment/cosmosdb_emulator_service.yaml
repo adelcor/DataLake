@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cosmosdb-emulator-service
+spec:
+  type: NodePort
+  ports:
+    - name: web
+      port: 8081
+      targetPort: 8081
+      nodePort: 30081
+    - name: port-10250
+      port: 10250
+      targetPort: 10250
+    - name: port-10251
+      port: 10251
+      targetPort: 10251
+    - name: port-10252
+      port: 10252
+      targetPort: 10252
+    - name: port-10253
+      port: 10253
+      targetPort: 10253
+    - name: port-10254
+      port: 10254
+      targetPort: 10254
+    - name: port-10255
+      port: 10255
+      targetPort: 10255
+  selector:
+    app: cosmosdb-emulator

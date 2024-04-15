@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cosmosdb-emulator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cosmosdb-emulator
+  template:
+    metadata:
+      labels:
+        app: cosmosdb-emulator
+    spec:
+      containers:
+        - name: cosmosdb-emulator
+          image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
+          ports:
+            - containerPort: 8081
+            - containerPort: 10250
+            - containerPort: 10251
+            - containerPort: 10252
+            - containerPort: 10253
+            - containerPort: 10254
+            - containerPort: 10255
