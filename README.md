@@ -1,7 +1,7 @@
 ### SparkDataLake
 
 #### Description
-DataLake is a project designed for ingesting, processing, and analyzing data using Scala and Apache Spark. The project facilitates the configuration and deployment of services in Kubernetes and Azure environments, providing the necessary scripts and configurations to handle data from various sources.
+SparkDataLake is a project designed for ingesting, processing, and analyzing data using Scala and Apache Spark. The project facilitates the configuration and deployment of services in Kubernetes and Azure environments, providing the necessary scripts and configurations to handle data from various sources.
 
 #### Main Features
 
@@ -114,10 +114,10 @@ DataLake
 Contributions are welcome. Please create a pull request to propose changes.
 
 
-### Proyecto: DataLake
+### SparkDataLake
 
 #### Descripción
-DataLake es un proyecto diseñado para la ingesta, procesamiento y análisis de datos utilizando Scala y Apache Spark. El proyecto facilita la configuración y el despliegue de servicios en entornos Kubernetes y Azure, proporcionando los scripts y configuraciones necesarios para manejar datos de varias fuentes.
+SparkDataLake es un proyecto diseñado para la ingesta, procesamiento y análisis de datos utilizando Scala y Apache Spark. El proyecto facilita la configuración y el despliegue de servicios en entornos Kubernetes y Azure, proporcionando los scripts y configuraciones necesarios para manejar datos de varias fuentes.
 
 #### Funcionalidades Principales
 
