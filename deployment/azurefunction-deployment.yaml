@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: azurefunctiontest-deployment
+  name: azurefunctiontest-deployment  # Name of the deployment
 spec:
-  replicas: 1
+  replicas: 1  # Number of pod replicas to maintain
   selector:
     matchLabels:
-      app: azurefunctiontest
+      app: azurefunctiontest  # Label selector to identify the pods managed by this deployment
   template:
     metadata:
       labels:
-        app: azurefunctiontest
+        app: azurefunctiontest  # Labels to be assigned to the pods created by this deployment
     spec:
       containers:
-      - name: azurefunctiontest
-        image: cyberpong/myappk8s:latest
-        ports:
-        - containerPort: 7071
+        - name: azurefunctiontest  # Name of the container
+          image: cyberpong/myappk8s:latest  # Docker image to use for the container
+          ports:
+            - containerPort: 7071  # Port on which the container will listen

@@ -1,13 +1,11 @@
-# Obtener todos los trabajos en segundo plano relacionados con el reenvío de puertos
+# Get all port-forwarding jobs
 $portForwardJobs = Get-Job | Where-Object { $_.Command -like "*kubectl port-forward*" }
 
-# Detener y eliminar cada trabajo
+# Stop and remove each port-forwarding job
 foreach ($job in $portForwardJobs) {
-    # Detener el trabajo
-    Stop-Job -Job $job
-    # Eliminar el trabajo
-    Remove-Job -Job $job
+    Stop-Job -Job $job  # Stop the job
+    Remove-Job -Job $job  # Remove the job from the job list
 }
 
-# Mostrar el estado de todos los trabajos para verificar que todos han sido eliminados
+# Display the remaining jobs (if any)
 Get-Job

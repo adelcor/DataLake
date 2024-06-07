@@ -4,33 +4,32 @@ import java.util.Properties
 import scala.io.Source
 import org.example.Constants.TSMConst
 
+/**
+ * Object responsible for setting the connection properties for the database.
+ */
 object ConnectionPropertiesSetter {
-  // Load properties from the file specified in Exampleconst.Propertiespath.
+
+  // Load properties from the specified file path
   private val properties: Properties = loadPropertiesFromFile(TSMConst.PropertiesPath)
 
   /**
-   * Loads properties from a file located at the given filePath.
+   * Loads properties from a file.
    *
    * @param filePath The path to the properties file.
    * @return A Properties object containing the loaded properties.
    */
   private def loadPropertiesFromFile(filePath: String): Properties = {
     val props = new Properties()
-    // Using scala.io.Source to read from the file.
     val source = Source.fromURL(getClass.getResource(filePath))
-    // Loading properties from the file.
     props.load(source.bufferedReader())
     source.close()
     props
   }
 
   /**
-   * Retrieves the database connection properties.
+   * Retrieves the connection properties for the database.
    *
-   * Extracts user and password properties and encapsulates them into a new Properties object.
-   * Note: This method assumes that 'db.user' and 'db.password' are present in the properties file.
-   *
-   * @return A Properties object containing user and password for the database connection.
+   * @return A Properties object containing the connection properties.
    */
   def getConnectionProperties: Properties = {
     val connectionProperties = new Properties()
@@ -42,12 +41,10 @@ object ConnectionPropertiesSetter {
         connectionProperties.setProperty("user", user)
         connectionProperties.setProperty("password", password)
       } else {
-        // Throw an exception if user or password is not defined in properties.
         throw new IllegalStateException("Database user or password not defined in properties.")
       }
     } catch {
       case ex: Exception =>
-        // Handle any exceptions that may occur during property extraction.
         println(s"Error setting connection properties: ${ex.getMessage}")
     }
 

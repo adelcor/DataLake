@@ -1,25 +1,25 @@
-# Definir variables generales
+# Define the container name and connection string
 $containerName = "micontenedor"
 $connectionString = "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;"
 
-# Función para verificar y crear contenedor si no existe
+# Function to ensure the container exists
 function Ensure-Container {
     $exists = az storage container exists `
         --name $containerName `
         --connection-string $connectionString `
         --output tsv --query exists
     if (-Not [System.Convert]::ToBoolean($exists)) {
-        Write-Host "Creando contenedor $containerName."
+        Write-Host "Creating container $containerName."
         az storage container create `
             --name $containerName `
             --connection-string $connectionString
-        Write-Host "Contenedor $containerName creado."
+        Write-Host "Container $containerName created."
     } else {
-        Write-Host "El contenedor $containerName ya existe."
+        Write-Host "Container $containerName already exists."
     }
 }
 
-# Función para subir archivos a Azure Blob Storage
+# Function to upload a blob to the container
 function Upload-Blob {
     param (
         [Parameter(Mandatory=$true)]
@@ -29,7 +29,7 @@ function Upload-Blob {
     )
 
     if (-Not (Test-Path $fileName)) {
-        Write-Host "El archivo $fileName no existe."
+        Write-Host "File $fileName does not exist."
         return
     }
 
@@ -40,37 +40,37 @@ function Upload-Blob {
         --output tsv --query exists
 
     if ([System.Convert]::ToBoolean($blobExists)) {
-        Write-Host "El blob $blobName ya existe en el contenedor $containerName."
+        Write-Host "Blob $blobName already exists in container $containerName."
     } else {
         try {
-            Write-Host "Iniciando la subida del archivo $fileName al blob $blobName."
+            Write-Host "Starting upload of file $fileName to blob $blobName."
             az storage blob upload `
                 --container-name $containerName `
                 --file $fileName `
                 --name $blobName `
                 --connection-string $connectionString
-            Write-Host "Archivo $fileName subido exitosamente como $blobName."
+            Write-Host "File $fileName successfully uploaded as $blobName."
         } catch {
-            Write-Host "Error al subir el archivo: $_"
+            Write-Host "Error uploading file: $_"
         }
     }
 }
 
-# Crear el contenedor si no existe
+# Ensure the container exists
 Ensure-Container
 
-# Llamar a la función para subir cada archivo
+# Upload the specified files as blobs
 Upload-Blob -fileName "tortilla_prices.csv" -blobName "tortilla_prices.csv"
 Upload-Blob -fileName "SalmonandSeaTroutNets1952-2022.csv" -blobName "SalmonandSeaTroutNets1952-2022.csv"
 Upload-Blob -fileName "meteorite-landings.csv" -blobName "meteorite-landings.csv"
 
-# Listar los blobs en el contenedor para verificar
+# List the blobs in the container
 try {
-    Write-Host "Listando los blobs en el contenedor $containerName."
+    Write-Host "Listing blobs in container $containerName."
     az storage blob list `
         --container-name $containerName `
         --output table `
         --connection-string $connectionString
 } catch {
-    Write-Host "Error al listar blobs: $_"
+    Write-Host "Error listing blobs: $_"
 }

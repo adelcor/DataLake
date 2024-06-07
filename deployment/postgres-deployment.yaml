@@ -1,22 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres-deployment
+  name: postgres-deployment  # Name of the deployment
 spec:
-  replicas: 1
+  replicas: 1  # Number of pod replicas to maintain
   selector:
     matchLabels:
-      app: postgres
+      app: postgres  # Label selector to identify the pods managed by this deployment
   template:
     metadata:
       labels:
-        app: postgres
+        app: postgres  # Labels to be assigned to the pods created by this deployment
     spec:
       containers:
-      - name: postgres
-        image: postgres:latest
-        env:
-        - name: POSTGRES_PASSWORD
-          value: "admin"
-        ports:
-        - containerPort: 5432
+        - name: postgres  # Name of the container
+          image: postgres:latest  # Docker image to use for the container
+          env:
+            - name: POSTGRES_PASSWORD  # Environment variable for the PostgreSQL password
+              value: "admin"  # Value of the PostgreSQL password (change this to a secure password)
+          ports:
+            - containerPort: 5432  # Port on which the container will listen
+

@@ -1,11 +1,23 @@
 package org.example.TSMmaps
 
+/**
+ * Object containing column mappings for various datasets.
+ */
 object ColumnMaps {
 
+  /**
+   * Column mappings for the tortilla dataset.
+   * Maps the original column names to new column names.
+   */
   val columnMapTortilla: Map[String, String] = Map(
     "Store Type" -> "Store_Type",
     "Price per kilogram" -> "Price_per_kilogram"
   )
+
+  /**
+   * Column mappings for the salmon dataset.
+   * Maps the original column names to new column names.
+   */
   val columnMapSalmones: Map[String, String] = Map(
     "District ID" -> "District_ID",
     "Report order" -> "Report_order",

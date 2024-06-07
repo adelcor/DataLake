@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: azurite-deployment
+  name: azurite-deployment  # Name of the deployment
 spec:
-  replicas: 1
+  replicas: 1  # Number of pod replicas to maintain
   selector:
     matchLabels:
-      app: azurite
+      app: azurite  # Label selector to identify the pods managed by this deployment
   template:
     metadata:
       labels:
-        app: azurite
+        app: azurite  # Labels to be assigned to the pods created by this deployment
     spec:
       containers:
-      - name: azurite
-        image: mcr.microsoft.com/azure-storage/azurite
-        ports:
-        - containerPort: 10000
-        - containerPort: 10001
-        - containerPort: 10002
+        - name: azurite  # Name of the container
+          image: mcr.microsoft.com/azure-storage/azurite  # Docker image to use for the container
+          ports:
+            - containerPort: 10000  # Port on which the container will listen for Blob service
+            - containerPort: 10001  # Port on which the container will listen for Queue service
+            - containerPort: 10002  # Port on which the container will listen for Table service
